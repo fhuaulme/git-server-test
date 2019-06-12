@@ -44,7 +44,7 @@ default_args = {
     "owner": "airflow",
     "depends_on_past": False,
     "start_date": datetime.today().strftime("%m/%d/%Y %H:%M:%S"),
-    "email": ,
+    "email": "",
     "email_on_failure": True,
     "email_on_retry": False,
     "retries": 1
