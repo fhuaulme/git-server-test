@@ -43,7 +43,7 @@ default_args = {
     "owner": "airflow",
     "depends_on_past": False,
     "start_date": datetime.today().strftime("%m/%d/%Y %H:%M:%S"),
-    "email": "",
+    "email": "['tdc@talend.com', 'sre-alerts@talend.com']",
     "email_on_failure": True,
     "email_on_retry": False,
     "retries": 1
@@ -51,10 +51,10 @@ default_args = {
 
 configmaps = ['']
 
-dag = DAG('', default_args=default_args,
-          schedule_interval= '')
+dag = DAG('tdc-upgrade-task3', default_args=default_args,
+          schedule_interval= '@once')
 
-accounts = listAccounts("")
+accounts = listAccounts("tdc")
 validationAccounts= accounts[0:min(5, len(accounts))]
 remainingAccounts=[]
 if(len(validationAccounts) >= 5):
@@ -64,11 +64,11 @@ validationAccountOperator = SubDagOperator(dag=dag, parent=dag)
 
 for account in validationAccounts:
     accountId = str(account.get("id"))
-    current = KubernetesPodOperator(namespace="",
-                image="",
+    current = KubernetesPodOperator(namespace="default",
+                image="talend/tpsvc/cloud-tenant-upgrade:1.0.0",
                 arguments=[accountId],
-                name="" + accountId,
-                task_id="" + accountId,
+                name="tdc-upgrade-task3" + accountId,
+                task_id="tdc-upgrade-task3" + accountId,
                 is_delete_operator_pod=True,
                 hostnetwork=False,
                 in_cluster=True,
@@ -81,11 +81,11 @@ remainingAccountOperator = SubDagOperator(dag=dag, parent=dag)
 
 for account in remainingAccounts:
     accountId = str(account.get("id"))
-    current = KubernetesPodOperator(namespace="",
-                image="",
+    current = KubernetesPodOperator(namespace="default",
+                image="talend/tpsvc/cloud-tenant-upgrade:1.0.0",
                 arguments=[accountId],
-                name="" + accountId,
-                task_id="" + accountId,
+                name="tdc-upgrade-task3" + accountId,
+                task_id="tdc-upgrade-task3" + accountId,
                 is_delete_operator_pod=True,
                 hostnetwork=False,
                 in_cluster=True,
