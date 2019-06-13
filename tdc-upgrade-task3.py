@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
-from airflow.operators.slack_operator import SlackAPIPostOperator
 from airflow.operators.subdag_operator import SubDagOperator
 
 log_level=logging.DEBUG if os.environ.get('LOG_LEVEL') == 'DEBUG' else logging.INFO
